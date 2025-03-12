@@ -14,7 +14,7 @@ contents = st.text_area("", height=100)
 if st.button("조언 받기"):
     if contents.strip():
         with st.spinner("AI가 분석 중입니다..."):
-            # 프롬프트 감정부분 {sentiment}와 같은 형식으로 수정하기
+            # 프롬프트 감정부분 {sentiment}와 같은 형식으로 수정 필요
             prompt = f"""
 
 "{contents}"
