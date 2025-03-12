@@ -3,11 +3,9 @@ import os
 import streamlit as st
 from langchain_openai.chat_models import ChatOpenAI
 import time
-
-# OpenAI GPT 모델 로드
-load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+import numpy as np
 
 # 페이지 설정
 st.set_page_config(
@@ -17,13 +15,30 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
+@st.cache_resource
+def load_model():
+    model_path = "sentiment-bert-model2" 
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModelForSequenceClassification.from_pretrained(model_path)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
+    return tokenizer, model, device
+
+tokenizer, model, device = load_model()
+
+# OpenAI GPT 모델 로드
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
+
+
 # 사이드바 구성
 with st.sidebar:
-    #st.image("https://www.svgrepo.com/show/353655/discord-icon.svg", width=100)
     st.title("🤖 Advice Generator")
     st.markdown("---")
     st.markdown("### ⚙️ 설정")
-    model = st.selectbox(
+    model_type = st.selectbox(
         "사용 모델",
         ("gpt-3.5-turbo", "gpt-4")
     )
@@ -43,21 +58,26 @@ tab1, tab2 = st.tabs(["📝 조언 요청", "ℹ️ 사용 방법"])
 
 with tab1:
     st.markdown("### 의견 입력")
-    # 카드 스타일의 입력 영역
-    with st.container():
-        st.markdown("""
-        <style>
-        .input-container {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        </style>
-        <div class="input-container">
-        """, unsafe_allow_html=True)
-        
+    with st.container():        
         contents = st.text_area("", height=150, placeholder="의견을 입력해주세요 ...")
+        
+        def predict(contents):
+            inputs = tokenizer(contents, return_tensors="pt", truncation=True, max_length=128).to(device)
+            with torch.no_grad():
+                outputs = model(**inputs)
+                probabilities = outputs.logits.softmax(dim=-1)
+            return probabilities.cpu().numpy()
+
+        def model_forward(contents):
+            if isinstance(contents, list):
+                contents = [text if isinstance(text, str) else "" for text in contents]
+            else:
+                contents = [contents]
+            encoded_inputs = tokenizer(contents, padding=True, truncation=True, max_length=128, return_tensors="pt")
+            encoded_inputs = {key: tensor.to(device) for key, tensor in encoded_inputs.items()}
+            with torch.no_grad():
+                output = model(**encoded_inputs)
+                return output.logits.cpu().numpy()
         
         col1, col2, col3 = st.columns([1, 1, 1])
         with col2:
@@ -76,26 +96,35 @@ with tab1:
                 # 진행 상태 업데이트
                 progress_bar.progress(i + 1)
                 if i < 30:
-                    status_text.text("고객 의견 분석 중...")
+                    status_text.text("🧐 고객 의견 분석 중 ...")
                 elif i < 70:
-                    status_text.text("인사이트 생성 중...")
+                    status_text.text("🫨 인사이트 생성 중 ...")
                 elif i < 99:
-                    status_text.text("최종 결과 준비 중...")
+                    status_text.text("🤩 최종 결과 준비 중 ...")
                 else:
                     status_text.text("")
                 time.sleep(0.03)
+
+            inputs = tokenizer(contents, return_tensors="pt", truncation=True, max_length=128)
+            input_ids = inputs["input_ids"].to(device)
+            attention_mask = inputs["attention_mask"].to(device)
+            with torch.no_grad():
+                outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+                probabilities = outputs.logits.softmax(dim=-1).cpu().numpy()
+            pred_label = np.argmax(probabilities)
+            label_map = {0: "negative", 1: "neutral", 2: "positive"}
             
             # 프롬프트 구성
             prompt = f"""
             "{contents}"
 
-            위 의견은 감정 분석을 통해 "negative" 감정을 나타내는 것으로 분석되었습니다.
+            위 의견은 감정 분석을 통해 "{label_map[pred_label]}" 감정을 나타내는 것으로 분석되었습니다.
 
             당신의 역할:  
             - 서비스 개선을 위한 전략적 인사이트를 제공합니다.  
             - 감정을 고려하되, 감정적인 반응보다는 비즈니스적 해결책을 제안합니다.  
             - 고객의 불만 사항이 회사의 운영에 미칠 영향을 분석하고, 실용적인 대응 전략을 제공합니다.  
-            - 필요하면 업계 사례, 데이터 기반 인사이트를 포함하여 답변하세요.  
+            - 필요하면 업계 사례, 데이터 기반 인사이트를 포함하여 답변하세요.
 
             응답 예시: 
             - 감정이 "negative"이면: 문제의 원인을 분석하고 회사가 개선할 수 있는 전략적 조언을 제공합니다.  
@@ -112,27 +141,20 @@ with tab1:
             response = chat_model.predict(prompt)
             
             # 결과 출력
-            st.markdown("### 💡 AI Advice")
             with st.container():
-                st.markdown("""
-                <style>
-                .result-container {
-                    background-color: #f0f7ff;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                    border-left: 5px solid #4B89DC;
-                }
-                </style>
-                <div class="result-container">
-                """, unsafe_allow_html=True)
+                st.markdown("### 💡 AI Advice")
                 
+                # 결과 컨테이너 시작
+                st.markdown('<div class="result-container">', unsafe_allow_html=True)
+                
+                # 결과 내용 표시
                 st.markdown(response)
                 
-                st.markdown("</div>", unsafe_allow_html=True)
+                # 결과 컨테이너 종료
+                st.markdown('</div>', unsafe_allow_html=True)
                 
                 # 결과 피드백
-                st.markdown("#### 위 조언이 마음에 드셨나요?")
+                st.markdown("#### 마음에 드셨나요?")
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.button("👍 유용해요", use_container_width=True)
