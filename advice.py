@@ -79,7 +79,7 @@ with tab1:
                     status_text.text("고객 의견 분석 중...")
                 elif i < 70:
                     status_text.text("인사이트 생성 중...")
-                elif i < 99.5:
+                elif i < 99:
                     status_text.text("최종 결과 준비 중...")
                 else:
                     status_text.text("")
