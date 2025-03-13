@@ -1,0 +1,19 @@
+topic,top_words,topic_name
+0,"['bag', 'still', 'wait', 'luggage', 'lose', 'sit', 'baggage', 'hour', 'min', 'gate']","수하물 문제 (분실, 지연, 대기시간)"
+1,"['cancel', 'aa', 'get', 'tomorrow', 'home', 'need', 'rebooke', 'morning', 'help', 'early']",항공편 취소 및 재예약
+2,"['come', 'info', 'flt', 'voucher', 'food', 'sorry', 'mean', 'lga', 'break', 'work']","기타 서비스 문제 (바우처, 음식 제공 등)"
+3,"['time', 'go', 'today', 'get', 'next', 'first', 'board', 'already', 'buy', 'even']",탑승 및 일정 변경
+4,"['dfw', 'miss', 'right', 'hope', 'connection', 'ok', 'helpful', 'policy', 'make', 'might']",환승 및 연결 항공편 문제
+5,"['problem', 'help', 'reservation', 'booking', 'offer', 'change', 'pick', 'seem', 'site', 'friend']",예약 및 웹사이트 문제
+6,"['thank', 'response', 'much', 'appreciate', 'follow', 'send', 'dm', 'yes', 'first', 'class']",긍정적 피드백 및 감사 메시지
+7,"['ticket', 'way', 'book', 'use', 'refund', 'fee', 'dallas', 'get', 'change', 'name']","항공권 관련 문제 (환불, 수수료, 예약 변경)"
+8,"['last', 'week', 'night', 'american', 'phl', 'credit', 'mile', 'give', 'chance', 'could']",마일리지 및 보상 문제
+9,"['service', 'customer', 'great', 'rude', 'care', 'thanks', 'rep', 'suck', 'crew', 'job']",고객 서비스 및 응대 불만
+10,"['please', 'know', 'email', 'number', 'let', 'need', 'help', ""'"", 'speak', 'send']",고객센터 및 이메일 응대 문제
+11,"['gate', 'agent', 'check', 'line', 'seat', 'keep', 'passenger', 'update', 'stop', 'fleet']",공항 및 게이트 서비스 문제
+12,"['airplane', 'delay', 'hour', 'late', 'weather', 'jfk', 'due', 'issue', 'hrs', 'get']",비행기 지연 및 기상 문제
+13,"['airline', 'bad', 'fly', 'look', 'never', 'ever', 'like', 'experience', 'year', 'good']",항공사 서비스 불만
+14,"['free', 'app', 'travel', 'tonight', 'twitter', 'treat', 'member', 'kid', 'get', 'lot']",멤버십 및 특별 서비스 문제
+15,"['guy', 'would', 'love', 'like', 'see', 'new', 'say', 'nice', 'fly', 'go']",전반적인 브랜드 인식 및 이미지
+16,"['call', 'hold', 'hour', 'get', 'phone', 'try', 'help', 'minute', 'wait', 'back']",전화 대기 및 고객센터 연결 문제
+17,"['well', 'system', 'air', 'boarding', 'day', 'move', 'pass', 'pls', 'need', 'chicago']",탑승 및 보딩 프로세스 문제
