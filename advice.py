@@ -19,7 +19,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
 @st.cache_resource
 def load_model():
     model_path = "sentiment-bert-model2" 
@@ -45,14 +44,13 @@ explainer = shap.Explainer(sentiment_pipeline)
 
 # OpenAI GPT 모델 로드
 load_dotenv()
-OPENAI_API_KEY = st.secrets["openai"]["api_key"]
+#OPENAI_API_KEY = st.secrets["openai"]["api_key"]
+OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 
 
 # 사이드바 구성
 with st.sidebar:
-    st.title("MENU")
-    st.markdown("---")
     st.markdown("### ⚙️ 설정")
     st.markdown("")
     model_type = st.selectbox(
@@ -149,7 +147,7 @@ with tab1:
             st_shap(shap_html, height=400)
 
             sentiment_mapping = {0: "negative", 1: "neutral", 2: "positive"}
-            sentiment = sentiment_mapping.get(pred_label, "unknown")
+            sentiment = sentiment_mapping.get(pred_label)
             
             # 프롬프트
             prompt = f"""
@@ -165,13 +163,13 @@ with tab1:
             - 필요하면 업계 사례, 데이터 기반 인사이트를 포함하여 답변하세요.
 
             응답 예시: 
-            - 감정이 "negative"이면: 문제의 원인을 분석하고 회사가 개선할 수 있는 전략적 조언을 제공합니다.  
-            - 감정이 "positive"이면: 고객 경험을 더욱 강화할 방법을 제안하세요.  
-            - 감정이 "neutral"이면: 추가적인 고객 피드백을 유도하고, 서비스 개선의 기회를 찾아 제안하세요.
+            - {sentiment}이 "negative"이면 문제의 원인을 분석하고 회사가 개선할 수 있는 전략적 조언을 제공합니다.  
+            - {sentiment}이 "positive"이면 고객 경험을 더욱 강화할 방법을 제안하세요.  
+            - {sentiment}이 "neutral"이면 추가적인 고객 피드백을 유도하고, 서비스 개선의 기회를 찾아 제안하세요.
             - 반드시 아래와 같은 형식으로 출력하세요:
-              1. 문제의 원인 분석 :
-              2. 실질적인 해결책 제안 :
-              3. 관련된 업계 사례나 참고할 만한 전략 :
+              1. 문제의 원인 분석
+              2. 실질적인 해결책 제안
+              3. 관련된 업계 사례나 참고할 만한 전략
 
             이제 분석적인 인사이트와 적용 가능하고 구체적이며 실용적인 전략을 포함하여 조언을 작성하세요:
             """
