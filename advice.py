@@ -45,7 +45,7 @@ explainer = shap.Explainer(sentiment_pipeline)
 
 # OpenAI GPT 모델 로드
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = st.secrets["openai"]["api_key"]
 chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 
 
