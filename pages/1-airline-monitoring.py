@@ -176,6 +176,16 @@ with tab2:
             filtered_reviews = filtered_reviews.drop_duplicates(subset=['tweet_id'])
             english_reviews = filtered_reviews['text'].tolist()
 
+            if english_reviews:
+                prompt = f"""
+                다음 영어 문장을 한국어로 번역해 주세요. 문장만 출력하고 번호는 제거해 주세요.
+                각 문장을 \n으로 분리해 주세요.
+                {english_reviews}
+                """
+                translated_reviews = chat_model.predict(prompt).split("\n")  # 줄바꿈 기준 분리
+
+                filtered_reviews["translated_text"] = translated_reviews
+                
             # 페이지네이션 상태 초기화
             if "page_number" not in st.session_state:
                 st.session_state.page_number = 1
@@ -236,7 +246,7 @@ with tab2:
 
                 for _, row in displayed_reviews.iterrows():
                     sentiment_label = sentiment_tags.get(row["airline_sentiment"], "❓ Unknown")
-                    tweet_text = html.escape(str(row['text']))  # HTML 인코딩 처리
+                    tweet_text = html.escape(str(row['translated_text']))  # HTML 인코딩 처리
 
                     table_html += f"""
                     <tr>
