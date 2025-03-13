@@ -148,7 +148,7 @@ with tab1:
             shap_html = shap.plots.text(shap_values)
             st_shap(shap_html, height=400)
             
-            # 프롬프트 구성
+            # 프롬프트
             prompt = f"""
             "{contents}"
 
