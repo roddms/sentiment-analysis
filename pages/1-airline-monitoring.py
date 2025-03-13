@@ -8,14 +8,8 @@ from dotenv import load_dotenv
 from langchain_openai.chat_models import ChatOpenAI
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
-#OPENAI_API_KEY = st.secrets["openai"]["api_key"]
-
-if "OPENAI_API_KEY" in st.secrets:
-    os.environ["OPENAI_API_KEY"] = st.secrets["openai"]["api_key"]
-else:
-    st.error("🔴 API 키가 없습니다. Streamlit Secrets를 확인하세요.")
-    
-chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=os.environ["OPENAI_API_KEY"])
+OPENAI_API_KEY = st.secrets["openai"]["api_key"]
+chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 
 # 페이지 설정
 st.set_page_config(
