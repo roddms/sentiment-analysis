@@ -28,8 +28,6 @@ df, topic_info = load_data()
 
 # 사이드 바 
 with st.sidebar:
-    st.title("MENU")
-    st.markdown("---")
     st.markdown("### ✈️ 항공사 선택")
     selected_airline = st.sidebar.selectbox("항공사를 선택하세요", df['airline'].unique())
     st.markdown("---")
