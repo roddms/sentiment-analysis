@@ -147,12 +147,15 @@ with tab1:
                 components.html(full_html, height=height, width=width)
             shap_html = shap.plots.text(shap_values)
             st_shap(shap_html, height=400)
+
+            sentiment_mapping = {0: "negative", 1: "neutral", 2: "positive"}
+            sentiment = sentiment_mapping.get(pred_label, "unknown")
             
             # 프롬프트
             prompt = f"""
             "{contents}"
 
-            위 의견은 감정 분석을 통해 "{pred_label}"  감정을 나타내는 것으로 분석되었습니다.
+            위 의견은 감정 분석을 통해 "{sentiment}" 감정을 나타내는 것으로 분석되었습니다.
 
             당신의 역할:  
             - 입력된 {business_type}를 고려하여 답변을 작성합니다.
