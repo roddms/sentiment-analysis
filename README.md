@@ -98,7 +98,7 @@ Kaggle의 **Twitter US Airline Sentiment dataset**을 활용하여 **트윗 내�
 ## 🔧 Trouble Shooting
 
 ### **📌 Twitter US Airline Sentiment Dataset 구성**
-이 데이터셋은 미국 항공사에 대한 트윗을 감성 분석한 것으로, **부정적인 감성이 압도적으로 많아 데이터 불균형(imbalanced data)이 발생**하는 특징이 있습니다.
+이 데이터셋은 미국 항공사에 대한 트윗을 감성 분석한 것으로, **부정적인 감성이 압도적으로 많아 데이터 불균형(imbalanced data)이 발생**하는 특징이 있음.
 
 | Sentiment | 비율 (%) |
 |-----------|---------|
@@ -106,7 +106,7 @@ Kaggle의 **Twitter US Airline Sentiment dataset**을 활용하여 **트윗 내�
 | **Neutral (중립적)** | **21%** |
 | **Positive (긍정적)** | **16%** |
 
-💡 **이러한 불균형 문제를 해결하지 않으면, 모델이 negative 클래스에 편향되어 예측 성능이 저하될 수 있음!**  
+💡 **이러한 불균형 문제를 해결하지 않으면, 모델이 negative 클래스에 편향되어 예측 성능이 저하될 가능성이 있음.**  
 
 ---
 ### **✅ 해결 방법: 손실 함수 변경 (CrossEntropyLoss → Focal Loss)**
@@ -117,7 +117,7 @@ Kaggle의 **Twitter US Airline Sentiment dataset**을 활용하여 **트윗 내�
 - 결과적으로 **소수 클래스(positive, neutral)의 예측 정확도가 낮아질 가능성이 큼**  
 
 #### **🔹 대안: Focal Loss 적용**
-Focal Loss는 **자주 등장하는 쉬운 샘플(negative)에 대한 가중치를 낮추고, 어려운 샘플(positive, neutral)에 더 집중하도록 유도하는 손실 함수**입니다.
+Focal Loss는 **자주 등장하는 쉬운 샘플(negative)에 대한 가중치를 낮추고, 어려운 샘플(positive, neutral)에 더 집중하도록 유도하는 손실 함수**
 
 | Loss Function | 특징 | 데이터 불균형 해결 |
 |--------------|------|----------------|
@@ -130,7 +130,7 @@ Focal Loss는 **자주 등장하는 쉬운 샘플(negative)에 대한 가중치�
 
 ## 🏆 최종 모델 성능
 
-학습된 모델의 성능은 **Train / Validation / Test 데이터에서의 정확도(Accuracy)로 평가**되었습니다.
+학습된 모델의 성능은 **Train / Validation / Test 데이터에서의 정확도(Accuracy)로 평가**
 
 | 데이터셋 | Accuracy (%) |
 |----------|-------------|
