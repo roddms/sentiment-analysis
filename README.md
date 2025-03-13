@@ -33,3 +33,11 @@ Kaggle의 **Twitter US Airline Sentiment dataset**을 활용하여 **트윗 내�
 
 ## 🚀 Try it!
 🔗 [스트림릿 배포 링크 추가]
+
+### 🔹 딥러닝 모델
+- BERT (Bidirectional Encoder Representations from Transformers)
+- 모델 성능 평가 : Accuracy
+## 🔧 Trouble shooting
+## 🚀 Try it!
+🔗 [(https://njjrovmj9qzxnmav6dct9u.streamlit.app/)]
+
