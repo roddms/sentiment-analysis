@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from langchain_openai.chat_models import ChatOpenAI
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = st.secrets["openai"]["api_key"]
 chat_model = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
 
 # 페이지 설정
